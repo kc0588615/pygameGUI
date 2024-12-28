@@ -10,9 +10,12 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-    "pygame-ce==2.4.1",
-    "pytweening==1.2.0",
-    "opencv-python==4.10.0.84"
+    "pygame-ce",
+    "pytweening",
+    "opencv-python",
+    "overrides",
+    "matplotlib",
+    "perlin-noise",
 ]
 
 [project.optional-dependencies]
