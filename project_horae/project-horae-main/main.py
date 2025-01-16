@@ -3,7 +3,6 @@ import random
 from animal import *
 from inputmanager import InputManager
 from ui import AnimalInspector
-from worldGeneration.config import *
 from worldGeneration.perlinNoise import *
 
 class Test:
@@ -14,7 +13,13 @@ class Test:
         if provided_screen:
             self.screen = provided_screen
         else:
-            self.screen = pygame.display.set_mode((self.screenw, self.screenh), pygame.SCALED) 
+            self.screen = pygame.display.set_mode(
+                (self.screenw, self.screenh),
+                pygame.SCALED | pygame.RESIZABLE
+            )
+        
+        self.backgroundStartingX = BACKGROUND_STARTING_X
+        self.backgroundStartingY = BACKGROUND_STARTING_Y
         
         self.mapRowLen = MAP_ROW_LEN
         self.mapData = [[random.randint(0, 1) for c in range(self.mapRowLen)] for row in range(self.mapRowLen)]
