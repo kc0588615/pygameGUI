@@ -6,9 +6,10 @@ from enum import Enum, auto
 from common.constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from pygame import Vector2
 from common.managers.managers import audio_manager
+from common.game_states.gui_state import GUIState
 
 class GameState(Enum):
-    CARDS = auto()
+    GUI = auto()
     MATCH3 = auto()
     HORAE = auto()
 
@@ -33,19 +34,11 @@ def main():
     current_state = GameState.HORAE
     
     # Import game components
-    from common.cards.card import Card
     from common.match3.frontend_puzzle import FrontendPuzzle
     from main import Test as HoraeGame  # Horae import after path is set
 
-    # Load card assets and sounds
-    card_background = pygame.image.load(os.path.join('common', 'assets', 'cards', 'card_1.png'))
-    card_background = pygame.image.load(os.path.join('common', 'assets', 'cards', 'card_2.png'))
-    card_background = pygame.image.load(os.path.join('common', 'assets', 'cards', 'card_3.png'))
-    audio_manager.load_sound("card_sound_4", os.path.join('common', 'assets', 'sounds', 'card_sounds', 'card_sound_4.wav'))
-    audio_manager.load_sound("card_sound_5", os.path.join('common', 'assets', 'sounds', 'card_sounds', 'card_sound_5.wav'))
-    
     # Initialize game instances
-    cards_game = None
+    gui_state = None
     match3_game = None
 
     # Save original directory and change to Horae's directory
@@ -77,7 +70,7 @@ def main():
                     running = False
                 elif event.key == pygame.K_TAB:
                     # Cycle through states
-                    if current_state == GameState.CARDS:
+                    if current_state == GameState.GUI:
                         current_state = GameState.MATCH3
                         if match3_game is None:
                             match3_game = FrontendPuzzle(
@@ -89,20 +82,16 @@ def main():
                     elif current_state == GameState.MATCH3:
                         current_state = GameState.HORAE
                     else:
-                        current_state = GameState.CARDS
-                        if cards_game is None:
-                            cards_game = Card(
-                                position=Vector2(SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
-                                card_size=Vector2(60, 90),
-                                background_surface=card_background
-                            )
+                        current_state = GameState.GUI
+                        if gui_state is None:
+                            gui_state = GUIState(screen)
             
             # Handle events for current game
-            if current_state == GameState.CARDS and cards_game is not None:
-                cards_game.process_events(event)
+            if current_state == GameState.GUI and gui_state is not None:
+                gui_state.handle_event(event)
             elif current_state == GameState.MATCH3 and match3_game is not None:
                 match3_game.handle_event(event)
-            elif current_state == GameState.HORAE:  # Add this section
+            elif current_state == GameState.HORAE:
                 horae.handle_event(event)
         
         screen.fill((0, 0, 0))  # Clear screen
@@ -115,8 +104,9 @@ def main():
             elif current_state == GameState.MATCH3 and match3_game is not None:
                 match3_game.process(delta)
                 match3_game.render(screen)
-            elif current_state == GameState.CARDS and cards_game is not None:
-                cards_game.render(screen, delta)
+            elif current_state == GameState.GUI and gui_state is not None:
+                gui_state.update()
+                gui_state.render()
                 
         except Exception as e:
             print("\nError in game loop:")

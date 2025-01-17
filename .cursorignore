@@ -5,3 +5,5 @@ build
 common/__pycache__
 common/assets/cards
 examples/venv
+.venv/
+.idea/
