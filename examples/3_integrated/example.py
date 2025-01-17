@@ -24,7 +24,7 @@ def main():
     
     # Add Horae's directory to Python path
     horae_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 
-                             'project_horae', 'project-horae-main')
+    'project_horae', 'project-horae-main')
     if horae_path not in sys.path:
         sys.path.append(horae_path)
         print(f"Added Horae path: {horae_path}")
@@ -39,6 +39,8 @@ def main():
 
     # Load card assets and sounds
     card_background = pygame.image.load(os.path.join('common', 'assets', 'cards', 'card_1.png'))
+    card_background = pygame.image.load(os.path.join('common', 'assets', 'cards', 'card_2.png'))
+    card_background = pygame.image.load(os.path.join('common', 'assets', 'cards', 'card_3.png'))
     audio_manager.load_sound("card_sound_4", os.path.join('common', 'assets', 'sounds', 'card_sounds', 'card_sound_4.wav'))
     audio_manager.load_sound("card_sound_5", os.path.join('common', 'assets', 'sounds', 'card_sounds', 'card_sound_5.wav'))
     
@@ -100,6 +102,8 @@ def main():
                 cards_game.process_events(event)
             elif current_state == GameState.MATCH3 and match3_game is not None:
                 match3_game.handle_event(event)
+            elif current_state == GameState.HORAE:  # Add this section
+                horae.handle_event(event)
         
         screen.fill((0, 0, 0))  # Clear screen
         

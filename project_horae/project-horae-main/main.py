@@ -24,8 +24,8 @@ class Test:
         self.mapRowLen = MAP_ROW_LEN
         self.mapData = [[random.randint(0, 1) for c in range(self.mapRowLen)] for row in range(self.mapRowLen)]
         
-        self.backgroundStartingX = 350
-        self.backgroundStartingY = 200
+        self.backgroundStartingX = 50
+        self.backgroundStartingY = 50
         self.scale = 1
         
         self.clock = pygame.time.Clock()
@@ -54,10 +54,20 @@ class Test:
         """Handle a single pygame event"""
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # Left click
+                mouse_pos = pygame.mouse.get_pos()
+                clicked_animal = False
+                
+                # Check if click hit any animal
                 for animal in self.animalList:
-                    if animal.isClicked:
+                    if animal.isBeingClicked(mouse_pos):
+                        clicked_animal = True
                         self.selectedAnimal = animal
                         self.inspector = AnimalInspector(self.selectedAnimal)
+                        break
+                
+                # If click didn't hit any animal, hide inspector
+                if not clicked_animal and hasattr(self, 'inspector') and self.inspector:
+                    self.inspector.isShowing = False
         
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 3:  # Right click
