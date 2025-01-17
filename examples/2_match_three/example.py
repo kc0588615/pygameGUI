@@ -6,6 +6,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 from common.assets.fonts import M5X7
 from common.managers.managers import font_manager
 from common.match3.frontend_puzzle import FrontendPuzzle
+from common.file_helpers import get_sounds_directory
+from common.managers.managers import audio_manager
 
 SCREEN_WIDTH = int(240)
 SCREEN_HEIGHT = int(270)
@@ -29,6 +31,10 @@ def game_loop() -> None:
         grid_height=8,
         initial_state="full",
     )
+
+    # Load required audio
+    for i in range(3):
+        audio_manager.load_sound(f"glass_clink_{i}", os.path.join(get_sounds_directory(), f"glass_clink_{i}.wav"))
 
     event_handling_functions = [
         frontend_grid.handle_event,
